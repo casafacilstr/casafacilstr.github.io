@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Casa Fácil Store - Catálogo de Natal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f7f7f7;
+      --card-bg: #ffffff;
+      --primary: #c62828;
+      --primary-soft: #ffebee;
+      --accent: #2e7d32;
+      --text-main: #222222;
+      --text-muted: #666666;
+      --border-soft: #e0e0e0;
+      --shadow-soft: 0 10px 25px rgba(0,0,0,0.06);
+      --radius-lg: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #ffe6e6 0, #f7f7f7 45%, #f7f7f7 100%);
+      color: var(--text-main);
+      line-height: 1.5;
+      padding: 24px 12px 40px;
+    }
+
+    .page-wrapper {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 24px;
+      align-items: flex-start;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #c62828, #d32f2f, #f9a825);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 700;
+      font-size: 22px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .brand-text h1 {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    .brand-text span {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .hero-text {
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .hero-text-main {
+      max-width: 520px;
+    }
+
+    .hero-text-main h2 {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
+
+    .hero-text-main p {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .hero-badge {
+      background: var(--primary-soft);
+      color: var(--primary);
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+
+    .hero-badge span {
+      font-size: 16px;
+    }
+
+    /* Barra de busca e filtros */
+    .filters-card {
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      padding: 16px 16px 12px;
+      box-shadow: var(--shadow-soft);
+      margin-bottom: 24px;
+      border: 1px solid rgba(255,255,255,0.8);
+    }
+
+    .filters-top {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .filters-top-title {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    .results-count {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-left: auto;
+    }
+
+    .filters-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1.3fr);
+      gap: 10px;
+    }
+
+    .search-wrapper {
+      position: relative;
+    }
+
+    .search-wrapper input {
+      width: 100%;
+      padding: 8px 32px 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border-soft);
+      font-size: 13px;
+      outline: none;
+      background: #fafafa;
+    }
+
+    .search-wrapper input:focus {
+      border-color: var(--primary);
+      background: #ffffff;
+      box-shadow: 0 0 0 1px rgba(198,40,40,0.15);
+    }
+
+    .search-wrapper span {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 16px;
+      color: var(--text-muted);
+    }
+
+    .select-wrapper select {
+      width: 100%;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border-soft);
+      font-size: 13px;
+      background: #fafafa;
+      outline: none;
+    }
+
+    .select-wrapper select:focus {
+      border-color: var(--primary);
+      background: #ffffff;
+      box-shadow: 0 0 0 1px rgba(198,40,40,0.15);
+    }
+
+    /* Grid de produtos */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 16px;
+    }
+
+    .product-card {
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      padding: 14px 14px 16px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(255,255,255,0.9);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px rgba(0,0,0,0.09);
+      border-color: rgba(198,40,40,0.18);
+    }
+
+    .product-tag {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--accent);
+      background: #e8f5e9;
+      padding: 2px 8px;
+      border-radius: 999px;
+      align-self: flex-start;
+    }
+
+    .product-title {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .product-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      min-height: 40px;
+    }
+
+    .product-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-top: 4px;
+      gap: 8px;
+    }
+
+    .price-label {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .price-value {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .product-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .shipping-info {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .btn-buy {
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: none;
+      background: var(--primary);
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: background 0.15s ease, transform 0.1s ease;
+    }
+
+    .btn-buy:hover {
+      background: #b71c1c;
+      transform: translateY(-1px);
+    }
+
+    .btn-buy span {
+      font-size: 14px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 10px;
+      font-size: 13px;
+      color: var(--text-muted);
+      display: none;
+    }
+
+    footer {
+      margin-top: 26px;
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    @media (max-width: 720px) {
+      body {
+        padding: 18px 10px 32px;
+      }
+
+      header {
+        margin-bottom: 18px;
+      }
+
+      .hero-text {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .filters-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .results-count {
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-wrapper">
+    <header>
+      <div class="brand">
+        <div class="brand-logo">CF</div>
+        <div class="brand-text">
+          <h1>Casa Fácil Store</h1>
+          <span>Catálogo especial de Natal</span>
+        </div>
+      </div>
+
+      <div class="hero-text">
+        <div class="hero-text-main">
+          <h2>Decore seu Natal com poucos cliques 🎄</h2>
+          <p>Encontre pendentes, árvores, luzes e enfeites em um só lugar. Pesquise, filtre e vá direto para a página de compra do produto.</p>
+        </div>
+        <div class="hero-badge">
+          <span>⭐</span> Itens selecionados com ótimo custo-benefício
+        </div>
+      </div>
+    </header>
+
+    <!-- Barra de busca e filtros -->
+    <section class="filters-card">
+      <div class="filters-top">
+        <div class="filters-top-title">Filtre o catálogo</div>
+        <div class="results-count" id="resultsCount">4 produtos encontrados</div>
+      </div>
+
+      <div class="filters-grid">
+        <div class="search-wrapper">
+          <input
+            type="search"
+            id="searchInput"
+            placeholder="Pesquisar por nome ou tipo de produto (ex.: árvore, cortina de LED, Papai Noel...)"
+          />
+          <span>🔍</span>
+        </div>
+
+        <div class="select-wrapper">
+          <select id="categoryFilter">
+            <option value="todas">Todas as categorias</option>
+            <option value="pendentes">Pendentes e enfeites</option>
+            <option value="arvore">Árvores de Natal</option>
+            <option value="decoracao">Decoração temática</option>
+            <option value="iluminacao">Iluminação</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <!-- Lista de produtos -->
+    <section id="productsSection">
+      <div class="products-grid" id="productsGrid">
+        <!-- Produto 1 -->
+        <article
+          class="product-card"
+          data-category="pendentes decoracao"
+          data-name="kit 10 pendentes pelucia enfeite arvore natal papai noel grande 16cm decoracao luvinco"
+        >
+          <span class="product-tag">Pendentes & Enfeites</span>
+          <h3 class="product-title">
+            Kit 10 Pendentes Pelúcia Papai Noel 16cm – LuvinCo
+          </h3>
+          <p class="product-desc">
+            Pendurados em pelúcia macia, perfeitos para deixar a árvore cheia, divertida e com clima natalino para crianças e adultos.
+          </p>
+
+          <div class="product-meta">
+            <div>
+              <div class="price-label">a partir de</div>
+              <div class="price-value">R$ 58,05</div>
+            </div>
+            <div class="shipping-info">Ideal para árvores médias e grandes</div>
+          </div>
+
+          <div class="product-footer">
+            <span class="shipping-info">Compra segura via Amazon</span>
+            <a
+              class="btn-buy"
+              href="https://amzn.to/4r7GjY0"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span>🛒</span> Ver oferta
+            </a>
+          </div>
+        </article>
+
+        <!-- Produto 2 -->
+        <article
+          class="product-card"
+          data-category="arvore decoracao"
+          data-name="arvore de natal pinheiro canadense luxo 1,80m 800 galhos verde imperial premium grande cheia luvinco"
+        >
+          <span class="product-tag">Árvore de Natal</span>
+          <h3 class="product-title">
+            Árvore de Natal Pinheiro Canadense Luxo 1,80m – LuvinCo
+          </h3>
+          <p class="product-desc">
+            Pinheiro canadense com 800 galhos, verde tradicional, volumosa e cheia. Base perfeita para montar uma decoração de destaque na sala.
+          </p>
+
+          <div class="product-meta">
+            <div>
+              <div class="price-label">a partir de</div>
+              <div class="price-value">R$ 189,90</div>
+            </div>
+            <div class="shipping-info">Altura 1,80m • Estilo clássico</div>
+          </div>
+
+          <div class="product-footer">
+            <span class="shipping-info">Ótima relação custo x presença</span>
+            <a
+              class="btn-buy"
+              href="https://amzn.to/4i2Axmd"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span>🛒</span> Ver oferta
+            </a>
+          </div>
+        </article>
+
+        <!-- Produto 3 -->
+        <article
+          class="product-card"
+          data-category="pendentes decoracao"
+          data-name="papai noel escalador decorativo enfeite natalino escada penduravel arvore natal chamine janela varanda sacada pendente subindo escada"
+        >
+          <span class="product-tag">Decoração Temática</span>
+          <h3 class="product-title">
+            Papai Noel Escalador Decorativo
+          </h3>
+          <p class="product-desc">
+            Enfeite criativo de Papai Noel subindo uma escada, perfeito para pendurar em árvore, janela, sacada ou chaminé e deixar o ambiente divertido.
+          </p>
+
+          <div class="product-meta">
+            <div>
+              <div class="price-label">a partir de</div>
+              <div class="price-value">R$ 21,90</div>
+            </div>
+            <div class="shipping-info">Tamanho compacto • Fácil de pendurar</div>
+          </div>
+
+          <div class="product-footer">
+            <span class="shipping-info">Dá destaque em qualquer cantinho</span>
+            <a
+              class="btn-buy"
+              href="https://amzn.to/49nstua"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span>🛒</span> Ver oferta
+            </a>
+          </div>
+        </article>
+
+        <!-- Produto 4 -->
+        <article
+          class="product-card"
+          data-category="iluminacao decoracao"
+          data-name="cortina de led 3x3 300 leds branca fria decoracao natal ano novo casamento festas eventos especiais controle remoto 8 modos fio de cobre usb 110v 220v"
+        >
+          <span class="product-tag">Iluminação & Ambientes</span>
+          <h3 class="product-title">
+            Cortina de LED 3x3m com 300 LEDs Branca Fria
+          </h3>
+          <p class="product-desc">
+            Cortina de luz com 300 LEDs, 8 modos de iluminação e alimentação via USB. Ideal para parede, janela, varanda ou fundo de fotos.
+          </p>
+
+          <div class="product-meta">
+            <div>
+              <div class="price-label">a partir de</div>
+              <div class="price-value">R$ 37,90</div>
+            </div>
+            <div class="shipping-info">Controle remoto • 110V/220V</div>
+          </div>
+
+          <div class="product-footer">
+            <span class="shipping-info">Perfeita para Natal, Ano Novo e festas</span>
+            <a
+              class="btn-buy"
+              href="https://amzn.to/4oNGqWY"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span>🛒</span> Ver oferta
+            </a>
+          </div>
+        </article>
+      </div>
+
+      <div class="empty-state" id="emptyState">
+        Nenhum produto encontrado com os filtros atuais. Tente outra palavra-chave ou categoria.
+      </div>
+    </section>
+
+    <footer>
+      Casa Fácil Store • Página de divulgação de produtos em parceria com a Amazon.  
+      Os valores exibidos são de responsabilidade do vendedor na página de destino.
+    </footer>
+  </div>
+
+  <script>
+    const searchInput = document.getElementById('searchInput');
+    const categoryFilter = document.getElementById('categoryFilter');
+    const productsGrid = document.getElementById('productsGrid');
+    const productCards = Array.from(document.querySelectorAll('.product-card'));
+    const resultsCount = document.getElementById('resultsCount');
+    const emptyState = document.getElementById('emptyState');
+
+    function normalizeText(text) {
+      return text
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '');
+    }
+
+    function filterProducts() {
+      const searchTerm = normalizeText(searchInput.value.trim());
+      const category = categoryFilter.value;
+
+      let visibleCount = 0;
+
+      productCards.forEach(card => {
+        const name = normalizeText(card.dataset.name || '');
+        const cardCategories = normalizeText(card.dataset.category || '');
+
+        const matchSearch = !searchTerm || name.includes(searchTerm);
+        const matchCategory =
+          category === 'todas' || cardCategories.includes(category);
+
+        if (matchSearch && matchCategory) {
+          card.style.display = '';
+          visibleCount++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      resultsCount.textContent =
+        visibleCount === 1
+          ? '1 produto encontrado'
+          : `${visibleCount} produtos encontrados`;
+
+      if (visibleCount === 0) {
+        emptyState.style.display = 'block';
+      } else {
+        emptyState.style.display = 'none';
+      }
+    }
+
+    searchInput.addEventListener('input', filterProducts);
+    categoryFilter.addEventListener('change', filterProducts);
+
+    // Atualiza logo no carregamento
+    filterProducts();
+  </script>
+</body>
+</html>
