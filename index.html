@@ -369,7 +369,7 @@
     <section class="filters-card">
       <div class="filters-top">
         <div class="filters-top-title">Filtre o catálogo</div>
-        <div class="results-count" id="resultsCount">4 produtos encontrados</div>
+        <div class="results-count" id="resultsCount">Carregando produtos...</div>
       </div>
 
       <div class="filters-grid">
@@ -377,7 +377,7 @@
           <input
             type="search"
             id="searchInput"
-            placeholder="Pesquisar por nome ou tipo de produto (ex.: árvore, cortina de LED, Papai Noel...)"
+            placeholder="Pesquisar por nome, tipo ou código (ex.: 1AN25PA, árvore, Papai Noel...)"
           />
           <span>🔍</span>
         </div>
@@ -394,149 +394,9 @@
       </div>
     </section>
 
-    <!-- Lista de produtos -->
+    <!-- Lista de produtos (preenchida via JS) -->
     <section id="productsSection">
-      <div class="products-grid" id="productsGrid">
-        <!-- Produto 1 -->
-        <article
-          class="product-card"
-          data-category="pendentes decoracao"
-          data-name="kit 10 pendentes pelucia enfeite arvore natal papai noel grande 16cm decoracao luvinco"
-        >
-          <span class="product-tag">Pendentes & Enfeites</span>
-          <h3 class="product-title">
-            1AN25PA - Kit 10 Pendentes Pelúcia Papai Noel 16cm – LuvinCo
-          </h3>
-          <p class="product-desc">
-            Pendurados em pelúcia macia, perfeitos para deixar a árvore cheia, divertida e com clima natalino para crianças e adultos.
-          </p>
-
-          <div class="product-meta">
-            <div>
-              <div class="price-label">a partir de</div>
-              <div class="price-value">R$ 58,05</div>
-            </div>
-            <div class="shipping-info">Ideal para árvores médias e grandes</div>
-          </div>
-
-          <div class="product-footer">
-            <span class="shipping-info">Compra segura via Amazon</span>
-            <a
-              class="btn-buy"
-              href="https://amzn.to/4r7GjY0"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <span>🛒</span> Ver oferta
-            </a>
-          </div>
-        </article>
-
-        <!-- Produto 2 -->
-        <article
-          class="product-card"
-          data-category="arvore decoracao"
-          data-name="arvore de natal pinheiro canadense luxo 1,80m 800 galhos verde imperial premium grande cheia luvinco"
-        >
-          <span class="product-tag">Árvore de Natal</span>
-          <h3 class="product-title">
-            2AN25AE - Árvore de Natal Pinheiro Canadense Luxo 1,80m – LuvinCo
-          </h3>
-          <p class="product-desc">
-            Pinheiro canadense com 800 galhos, verde tradicional, volumosa e cheia. Base perfeita para montar uma decoração de destaque na sala.
-          </p>
-
-          <div class="product-meta">
-            <div>
-              <div class="price-label">a partir de</div>
-              <div class="price-value">R$ 189,90</div>
-            </div>
-            <div class="shipping-info">Altura 1,80m • Estilo clássico</div>
-          </div>
-
-          <div class="product-footer">
-            <span class="shipping-info">Ótima relação custo x presença</span>
-            <a
-              class="btn-buy"
-              href="https://amzn.to/4i2Axmd"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <span>🛒</span> Ver oferta
-            </a>
-          </div>
-        </article>
-
-        <!-- Produto 3 -->
-        <article
-          class="product-card"
-          data-category="pendentes decoracao"
-          data-name="papai noel escalador decorativo enfeite natalino escada penduravel arvore natal chamine janela varanda sacada pendente subindo escada"
-        >
-          <span class="product-tag">Decoração Temática</span>
-          <h3 class="product-title">
-            3AN25PA - Papai Noel Escalador Decorativo
-          </h3>
-          <p class="product-desc">
-            Enfeite criativo de Papai Noel subindo uma escada, perfeito para pendurar em árvore, janela, sacada ou chaminé e deixar o ambiente divertido.
-          </p>
-
-          <div class="product-meta">
-            <div>
-              <div class="price-label">a partir de</div>
-              <div class="price-value">R$ 21,90</div>
-            </div>
-            <div class="shipping-info">Tamanho compacto • Fácil de pendurar</div>
-          </div>
-
-          <div class="product-footer">
-            <span class="shipping-info">Dá destaque em qualquer cantinho</span>
-            <a
-              class="btn-buy"
-              href="https://amzn.to/49nstua"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <span>🛒</span> Ver oferta
-            </a>
-          </div>
-        </article>
-
-        <!-- Produto 4 -->
-        <article
-          class="product-card"
-          data-category="iluminacao decoracao"
-          data-name="cortina de led 3x3 300 leds branca fria decoracao natal ano novo casamento festas eventos especiais controle remoto 8 modos fio de cobre usb 110v 220v"
-        >
-          <span class="product-tag">Iluminação & Ambientes</span>
-          <h3 class="product-title">
-            4AN25LS - Cortina de LED 3x3m com 300 LEDs Branca Fria
-          </h3>
-          <p class="product-desc">
-            Cortina de luz com 300 LEDs, 8 modos de iluminação e alimentação via USB. Ideal para parede, janela, varanda ou fundo de fotos.
-          </p>
-
-          <div class="product-meta">
-            <div>
-              <div class="price-label">a partir de</div>
-              <div class="price-value">R$ 37,90</div>
-            </div>
-            <div class="shipping-info">Controle remoto • 110V/220V</div>
-          </div>
-
-          <div class="product-footer">
-            <span class="shipping-info">Perfeita para Natal, Ano Novo e festas</span>
-            <a
-              class="btn-buy"
-              href="https://amzn.to/4oNGqWY"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <span>🛒</span> Ver oferta
-            </a>
-          </div>
-        </article>
-      </div>
+      <div class="products-grid" id="productsGrid"></div>
 
       <div class="empty-state" id="emptyState">
         Nenhum produto encontrado com os filtros atuais. Tente outra palavra-chave ou categoria.
@@ -553,28 +413,91 @@
     const searchInput = document.getElementById('searchInput');
     const categoryFilter = document.getElementById('categoryFilter');
     const productsGrid = document.getElementById('productsGrid');
-    const productCards = Array.from(document.querySelectorAll('.product-card'));
     const resultsCount = document.getElementById('resultsCount');
     const emptyState = document.getElementById('emptyState');
 
+    let produtos = [];   // dados do CSV
+    let cardsDOM = [];   // referências dos cards renderizados
+
     function normalizeText(text) {
-      return text
+      return (text || '')
         .toLowerCase()
         .normalize('NFD')
         .replace(/[\u0300-\u036f]/g, '');
     }
 
+    function criarCard(prod) {
+      const article = document.createElement('article');
+      article.className = 'product-card';
+
+      // categoria de busca (para filtro)
+      article.dataset.category = normalizeText(prod.categoria_busca || '');
+      // nome e código (para busca)
+      article.dataset.name = normalizeText(prod.nome || '');
+      article.dataset.code = normalizeText(prod.codigo || '');
+
+      const precoNumero = Number(prod.preco || 0);
+      const precoFormatado = isNaN(precoNumero)
+        ? (prod.preco || '')
+        : precoNumero.toFixed(2).replace('.', ',');
+
+      article.innerHTML = `
+        <span class="product-tag">${prod.categoria_label || ''}</span>
+        <h3 class="product-title">
+          ${prod.codigo || ''} - ${prod.nome || ''}
+        </h3>
+        <p class="product-desc">
+          ${prod.descricao || ''}
+        </p>
+
+        <div class="product-meta">
+          <div>
+            <div class="price-label">a partir de</div>
+            <div class="price-value">R$ ${precoFormatado}</div>
+          </div>
+          <div class="shipping-info">${prod.info_envio || ''}</div>
+        </div>
+
+        <div class="product-footer">
+          <span class="shipping-info">Compra segura via Amazon</span>
+          <a
+            class="btn-buy"
+            href="${prod.link || '#'}"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span>🛒</span> Ver oferta
+          </a>
+        </div>
+      `;
+
+      return article;
+    }
+
+    function renderizarProdutos() {
+      productsGrid.innerHTML = '';
+      cardsDOM = produtos.map(p => {
+        const card = criarCard(p);
+        productsGrid.appendChild(card);
+        return card;
+      });
+      filterProducts(); // aplica os filtros iniciais (sem busca)
+    }
+
     function filterProducts() {
       const searchTerm = normalizeText(searchInput.value.trim());
-      const category = categoryFilter.value;
+      const category = normalizeText(categoryFilter.value);
 
       let visibleCount = 0;
 
-      productCards.forEach(card => {
-        const name = normalizeText(card.dataset.name || '');
-        const cardCategories = normalizeText(card.dataset.category || '');
+      cardsDOM.forEach(card => {
+        const name = card.dataset.name || '';
+        const code = card.dataset.code || '';
+        const cardCategories = card.dataset.category || '';
 
-        const matchSearch = !searchTerm || name.includes(searchTerm);
+        const haystack = (name + ' ' + code).trim();
+
+        const matchSearch = !searchTerm || haystack.includes(searchTerm);
         const matchCategory =
           category === 'todas' || cardCategories.includes(category);
 
@@ -591,18 +514,48 @@
           ? '1 produto encontrado'
           : `${visibleCount} produtos encontrados`;
 
-      if (visibleCount === 0) {
-        emptyState.style.display = 'block';
-      } else {
-        emptyState.style.display = 'none';
+      emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
+    }
+
+    async function carregarCSV() {
+      try {
+        const resp = await fetch('produtos.csv');
+        if (!resp.ok) {
+          throw new Error('Resposta HTTP não OK');
+        }
+
+        const texto = await resp.text();
+        const linhas = texto.trim().split('\n');
+        if (linhas.length <= 1) {
+          resultsCount.textContent = 'Nenhum produto cadastrado.';
+          return;
+        }
+
+        // primeira linha é o cabeçalho
+        const cabecalho = linhas.shift().split(';').map(h => h.trim());
+
+        produtos = linhas.map(linha => {
+          const cols = linha.split(';');
+          const obj = {};
+          cabecalho.forEach((campo, idx) => {
+            obj[campo] = (cols[idx] || '').trim();
+          });
+          return obj;
+        });
+
+        renderizarProdutos();
+      } catch (e) {
+        console.error('Erro ao carregar produtos.csv', e);
+        resultsCount.textContent = 'Erro ao carregar produtos.';
       }
     }
 
+    // Eventos
     searchInput.addEventListener('input', filterProducts);
     categoryFilter.addEventListener('change', filterProducts);
 
-    // Atualiza logo no carregamento
-    filterProducts();
+    // Carrega os dados ao abrir a página
+    carregarCSV();
   </script>
 </body>
 </html>
