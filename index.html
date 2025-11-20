@@ -2,20 +2,21 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Casa Fácil Store - Catálogo de Natal</title>
+  <title>Casa Fácil Store - Vitrine de Ofertas</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #f7f7f7;
+      /* Paleta inspirada no logo */
+      --bg: #f4ecdd;          /* bege claro de fundo */
       --card-bg: #ffffff;
-      --primary: #c62828;
-      --primary-soft: #ffebee;
-      --accent: #2e7d32;
-      --text-main: #222222;
-      --text-muted: #666666;
-      --border-soft: #e0e0e0;
-      --shadow-soft: 0 10px 25px rgba(0,0,0,0.06);
+      --primary: #143c3a;     /* verde petróleo do logo */
+      --primary-soft: #e1ebe7;
+      --accent: #1f5956;      /* tom complementar do verde */
+      --text-main: #1f2827;
+      --text-muted: #6b7776;
+      --border-soft: #dcd7c8;
+      --shadow-soft: 0 10px 25px rgba(0,0,0,0.04);
       --radius-lg: 18px;
     }
 
@@ -27,7 +28,7 @@
 
     body {
       font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top, #ffe6e6 0, #f7f7f7 45%, #f7f7f7 100%);
+      background: radial-gradient(circle at top, #f8f1e0 0, var(--bg) 45%, var(--bg) 100%);
       color: var(--text-main);
       line-height: 1.5;
       padding: 24px 12px 40px;
@@ -42,7 +43,7 @@
       display: flex;
       flex-direction: column;
       gap: 12px;
-      margin-bottom: 24px;
+      margin-bottom: 18px;
       align-items: flex-start;
     }
 
@@ -53,10 +54,10 @@
     }
 
     .brand-logo {
-      width: 42px;
-      height: 42px;
+      width: 46px;
+      height: 46px;
       border-radius: 14px;
-      background: linear-gradient(135deg, #c62828, #d32f2f, #f9a825);
+      background: var(--primary);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -67,9 +68,10 @@
     }
 
     .brand-text h1 {
-      font-size: 22px;
+      font-size: 24px;
       font-weight: 700;
       letter-spacing: 0.04em;
+      color: var(--primary);
     }
 
     .brand-text span {
@@ -119,6 +121,45 @@
       font-size: 16px;
     }
 
+    /* Aviso inicial */
+    .disclaimer-card {
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      padding: 14px 14px 12px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(20,60,58,0.08);
+      margin-bottom: 18px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .disclaimer-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      background: var(--primary-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: var(--primary);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .disclaimer-content h2 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
+
+    .disclaimer-content p {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
     /* Barra de busca e filtros */
     .filters-card {
       background: var(--card-bg);
@@ -126,7 +167,7 @@
       padding: 16px 16px 12px;
       box-shadow: var(--shadow-soft);
       margin-bottom: 24px;
-      border: 1px solid rgba(255,255,255,0.8);
+      border: 1px solid rgba(255,255,255,0.9);
     }
 
     .filters-top {
@@ -172,7 +213,7 @@
     .search-wrapper input:focus {
       border-color: var(--primary);
       background: #ffffff;
-      box-shadow: 0 0 0 1px rgba(198,40,40,0.15);
+      box-shadow: 0 0 0 1px rgba(20,60,58,0.15);
     }
 
     .search-wrapper span {
@@ -197,10 +238,10 @@
     .select-wrapper select:focus {
       border-color: var(--primary);
       background: #ffffff;
-      box-shadow: 0 0 0 1px rgba(198,40,40,0.15);
+      box-shadow: 0 0 0 1px rgba(20,60,58,0.15);
     }
 
-    /* Filtro de preços */
+    /* Filtro de preços e desconto */
     .price-filters,
     .discount-filters {
       display: flex;
@@ -232,7 +273,7 @@
     .discount-filters input:focus {
       border-color: var(--primary);
       background: #ffffff;
-      box-shadow: 0 0 0 1px rgba(198,40,40,0.15);
+      box-shadow: 0 0 0 1px rgba(20,60,58,0.15);
     }
 
     .price-separator,
@@ -252,7 +293,7 @@
       border-radius: var(--radius-lg);
       padding: 14px 14px 16px;
       box-shadow: var(--shadow-soft);
-      border: 1px solid rgba(255,255,255,0.9);
+      border: 1px solid rgba(255,255,255,0.95);
       display: flex;
       flex-direction: column;
       gap: 8px;
@@ -261,8 +302,8 @@
 
     .product-card:hover {
       transform: translateY(-2px);
-      box-shadow: 0 14px 30px rgba(0,0,0,0.09);
-      border-color: rgba(198,40,40,0.18);
+      box-shadow: 0 14px 30px rgba(0,0,0,0.06);
+      border-color: rgba(20,60,58,0.18);
     }
 
     /* Carrossel de imagens */
@@ -271,7 +312,7 @@
       width: 100%;
       border-radius: 14px;
       overflow: hidden;
-      background: #fafafa;
+      background: #f5f5f5;
       margin-bottom: 6px;
       aspect-ratio: 4 / 3;
       max-height: 230px;
@@ -293,10 +334,10 @@
       flex: 0 0 100%;
       width: 100%;
       height: 100%;
-      object-fit: contain; /* encaixa a imagem sem cortar */
+      object-fit: contain;
       display: block;
       scroll-snap-align: center;
-      background: #fafafa;
+      background: #f5f5f5;
     }
 
     .image-nav {
@@ -335,7 +376,7 @@
       font-size: 11px;
       font-weight: 500;
       color: var(--accent);
-      background: #e8f5e9;
+      background: #e4f1ef;
       padding: 2px 8px;
       border-radius: 999px;
       align-self: flex-start;
@@ -380,8 +421,8 @@
       align-items: center;
       padding: 2px 8px;
       border-radius: 999px;
-      background: #ffebee;
-      color: #c62828;
+      background: #ffede9;
+      color: #c0392b;
       font-size: 11px;
       font-weight: 600;
     }
@@ -417,7 +458,7 @@
     }
 
     .btn-buy:hover {
-      background: #b71c1c;
+      background: #0f2f2d;
       transform: translateY(-1px);
     }
 
@@ -446,7 +487,7 @@
       }
 
       header {
-        margin-bottom: 18px;
+        margin-bottom: 16px;
       }
 
       .hero-text {
@@ -476,25 +517,39 @@
         <div class="brand-logo">CF</div>
         <div class="brand-text">
           <h1>Casa Fácil Store</h1>
-          <span>Catálogo especial de Natal</span>
+          <span>Vitrine independente de ofertas para o lar</span>
         </div>
       </div>
 
       <div class="hero-text">
         <div class="hero-text-main">
-          <h2>Decore seu Natal com poucos cliques 🎄</h2>
-          <p>Encontre pendentes, árvores, luzes e enfeites em um só lugar. Pesquise, filtre e vá direto para a página de compra do produto.</p>
+          <h2>Encontre produtos para sua casa em um só lugar</h2>
+          <p>Explore itens selecionados em lojas parceiras. Pesquise, filtre e acesse diretamente a página oficial de venda de cada produto.</p>
         </div>
         <div class="hero-badge">
-          <span>⭐</span> Itens selecionados com ótimo custo-benefício
+          <span>🏠</span> Curadoria de produtos para facilitar seu dia a dia
         </div>
       </div>
     </header>
 
+    <!-- Aviso de responsabilidade -->
+    <section class="disclaimer-card">
+      <div class="disclaimer-icon">ℹ️</div>
+      <div class="disclaimer-content">
+        <h2>Importante: esta página não é uma loja virtual</h2>
+        <p>
+          A Casa Fácil Store funciona apenas como uma vitrine de indicação de produtos (página de repasse de vendas).
+          As compras são realizadas diretamente nas lojas dos links apresentados (como Amazon e outras parceiras).
+          Preços, condições de pagamento, prazos de entrega, estoque, trocas e garantias são de responsabilidade
+          exclusiva das lojas responsáveis pela venda em cada página de destino.
+        </p>
+      </div>
+    </section>
+
     <!-- Barra de busca e filtros -->
     <section class="filters-card">
       <div class="filters-top">
-        <div class="filters-top-title">Filtre o catálogo</div>
+        <div class="filters-top-title">Filtre e encontre o produto ideal</div>
         <div class="results-count" id="resultsCount">Carregando produtos...</div>
       </div>
 
@@ -503,7 +558,7 @@
           <input
             type="search"
             id="searchInput"
-            placeholder="Pesquisar por nome, tipo ou código (ex.: AZ1PO, árvore, Papai Noel...)"
+            placeholder="Buscar por nome, tipo ou código (ex.: AZ1PO, árvore, kit panos...)"
           />
           <span>🔍</span>
         </div>
@@ -567,13 +622,13 @@
       <div class="products-grid" id="productsGrid"></div>
 
       <div class="empty-state" id="emptyState">
-        Nenhum produto encontrado com os filtros atuais. Tente outra palavra-chave, categoria, faixa de preço ou desconto.
+        Nenhum produto encontrado com os filtros atuais. Tente ajustar a palavra-chave, categoria, faixa de preço ou desconto.
       </div>
     </section>
 
     <footer>
-      Casa Fácil Store • Página de divulgação de produtos em parceria com a Amazon.
-      Os valores exibidos são de responsabilidade do vendedor na página de destino.
+      Casa Fácil Store • Vitrine independente de ofertas para o lar.  
+      As vendas, entregas, cobranças e garantias são de responsabilidade exclusiva das lojas indicadas nos links dos produtos.
     </footer>
   </div>
 
@@ -684,7 +739,7 @@
         </div>
 
         <div class="product-footer">
-          <span class="shipping-info">Compra segura via Amazon</span>
+          <span class="shipping-info">Compra segura diretamente na loja parceira</span>
           <a
             class="btn-buy"
             href="${prod.link || '#'}"
