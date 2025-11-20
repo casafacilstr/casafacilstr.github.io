@@ -468,10 +468,46 @@
 
     .empty-state {
       text-align: center;
-      padding: 40px 10px;
+      padding: 32px 10px 8px;
       font-size: 13px;
       color: var(--text-muted);
       display: none;
+    }
+
+    /* Paginação */
+    .pagination {
+      margin-top: 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .pagination button {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border-soft);
+      background: #ffffff;
+      font-size: 12px;
+      cursor: pointer;
+      color: var(--primary);
+      min-width: 80px;
+    }
+
+    .pagination button:hover:not(:disabled) {
+      border-color: var(--primary);
+      background: var(--primary-soft);
+    }
+
+    .pagination button:disabled {
+      opacity: 0.4;
+      cursor: default;
+    }
+
+    .pagination-info {
+      font-weight: 500;
     }
 
     footer {
@@ -507,6 +543,12 @@
       .discount-filters input {
         width: 100px;
       }
+
+      .pagination {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
     }
   </style>
 </head>
@@ -540,6 +582,8 @@
         <p>
           A Casa Fácil Store funciona apenas como uma vitrine de indicação de produtos (página de repasse de vendas).
           As compras são realizadas diretamente nas lojas dos links apresentados (como Amazon e outras parceiras).
+          Preços, condições de pagamento, prazos de entrega, estoque, trocas e garantias são de responsabilidade
+          exclusiva das lojas responsáveis pela venda em cada página de destino.
         </p>
       </div>
     </section>
@@ -622,6 +666,8 @@
       <div class="empty-state" id="emptyState">
         Nenhum produto encontrado com os filtros atuais. Tente ajustar a palavra-chave, categoria, faixa de preço ou desconto.
       </div>
+
+      <div class="pagination" id="pagination"></div>
     </section>
 
     <footer>
@@ -640,9 +686,14 @@
     const productsGrid = document.getElementById('productsGrid');
     const resultsCount = document.getElementById('resultsCount');
     const emptyState = document.getElementById('emptyState');
+    const paginationEl = document.getElementById('pagination');
+
+    const ITEMS_PER_PAGE = 15;
+    let currentPage = 1;
 
     let produtos = [];   // dados do CSV
     let cardsDOM = [];   // referências dos cards renderizados
+    let filteredCards = []; // cards que passaram no filtro
 
     function normalizeText(text) {
       return (text || '')
@@ -760,7 +811,8 @@
         return card;
       });
       attachImageNavEvents();
-      filterProducts(); // aplica os filtros iniciais (sem busca)
+      currentPage = 1;
+      filterProducts(); // aplica os filtros iniciais
     }
 
     function attachImageNavEvents() {
@@ -788,9 +840,50 @@
 
         strip.addEventListener('scroll', updateButtons);
 
-        // inicializa estado dos botões
         setTimeout(updateButtons, 100);
       });
+    }
+
+    function updatePagination() {
+      const totalItems = filteredCards.length;
+      const totalPages = totalItems === 0 ? 1 : Math.ceil(totalItems / ITEMS_PER_PAGE);
+
+      if (currentPage > totalPages) currentPage = totalPages;
+      if (currentPage < 1) currentPage = 1;
+
+      // Esconde todos
+      cardsDOM.forEach(card => {
+        card.style.display = 'none';
+      });
+
+      if (totalItems === 0) {
+        emptyState.style.display = 'block';
+        resultsCount.textContent = '0 produtos encontrados';
+        paginationEl.innerHTML = '';
+        return;
+      }
+
+      emptyState.style.display = 'none';
+
+      const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+      const endIndex = startIndex + ITEMS_PER_PAGE;
+
+      filteredCards.forEach((card, index) => {
+        if (index >= startIndex && index < endIndex) {
+          card.style.display = '';
+        }
+      });
+
+      resultsCount.textContent =
+        totalItems === 1
+          ? '1 produto encontrado'
+          : `${totalItems} produtos encontrados`;
+
+      paginationEl.innerHTML = `
+        <button type="button" data-action="prev" ${currentPage === 1 ? 'disabled' : ''}>Anterior</button>
+        <span class="pagination-info">Página ${currentPage} de ${totalPages}</span>
+        <button type="button" data-action="next" ${currentPage === totalPages ? 'disabled' : ''}>Próxima</button>
+      `;
     }
 
     function filterProducts() {
@@ -809,7 +902,7 @@
       let maxDiscount = parseFloat((maxDiscountInput.value || '').replace(',', '.'));
       if (isNaN(maxDiscount)) maxDiscount = null;
 
-      let visibleCount = 0;
+      filteredCards = [];
 
       cardsDOM.forEach(card => {
         const name = card.dataset.name || '';
@@ -839,19 +932,11 @@
         const matchDiscount = matchDiscountMin && matchDiscountMax;
 
         if (matchSearch && matchCategory && matchPrice && matchDiscount) {
-          card.style.display = '';
-          visibleCount++;
-        } else {
-          card.style.display = 'none';
+          filteredCards.push(card);
         }
       });
 
-      resultsCount.textContent =
-        visibleCount === 1
-          ? '1 produto encontrado'
-          : `${visibleCount} produtos encontrados`;
-
-      emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
+      updatePagination();
     }
 
     async function carregarCSV() {
@@ -868,7 +953,6 @@
           return;
         }
 
-        // primeira linha é o cabeçalho
         const cabecalho = linhas.shift().split(';').map(h => h.trim());
 
         produtos = linhas.map(linha => {
@@ -887,17 +971,54 @@
       }
     }
 
-    // Eventos
-    searchInput.addEventListener('input', filterProducts);
-    categoryFilter.addEventListener('change', filterProducts);
-    minPriceInput.addEventListener('input', filterProducts);
-    maxPriceInput.addEventListener('input', filterProducts);
-    minDiscountInput.addEventListener('input', filterProducts);
-    maxDiscountInput.addEventListener('input', filterProducts);
+    // Eventos filtros
+    searchInput.addEventListener('input', () => {
+      currentPage = 1;
+      filterProducts();
+    });
+    categoryFilter.addEventListener('change', () => {
+      currentPage = 1;
+      filterProducts();
+    });
+    minPriceInput.addEventListener('input', () => {
+      currentPage = 1;
+      filterProducts();
+    });
+    maxPriceInput.addEventListener('input', () => {
+      currentPage = 1;
+      filterProducts();
+    });
+    minDiscountInput.addEventListener('input', () => {
+      currentPage = 1;
+      filterProducts();
+    });
+    maxDiscountInput.addEventListener('input', () => {
+      currentPage = 1;
+      filterProducts();
+    });
+
+    // Eventos de paginação
+    paginationEl.addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-action]');
+      if (!btn) return;
+      const action = btn.dataset.action;
+      if (action === 'prev' && currentPage > 1) {
+        currentPage--;
+        updatePagination();
+      }
+      if (action === 'next') {
+        const totalPages = filteredCards.length === 0
+          ? 1
+          : Math.ceil(filteredCards.length / ITEMS_PER_PAGE);
+        if (currentPage < totalPages) {
+          currentPage++;
+          updatePagination();
+        }
+      }
+    });
 
     // Carrega os dados ao abrir a página
     carregarCSV();
   </script>
 </body>
 </html>
-
