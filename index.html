@@ -530,7 +530,7 @@
 
       // caminho da imagem: imagens/{codigo}/1.jpg
       const imageFolder = (prod.codigo || '').trim();
-      const imageUrl = imageFolder ? `imagens/${imageFolder}/1.jpg` : '';
+      const imageUrl = imageFolder ? `imagens/${imageFolder}/1.webp` : '';
       const imageHTML = imageUrl
         ? `
         <div class="product-image-wrapper">
@@ -678,3 +678,4 @@
   </script>
 </body>
 </html>
+
