@@ -608,10 +608,6 @@
         <div class="select-wrapper">
           <select id="categoryFilter">
             <option value="todas">Todas as categorias</option>
-            <option value="pendentes">Pendentes e enfeites</option>
-            <option value="arvore">Árvores de Natal</option>
-            <option value="decoracao">Decoração temática</option>
-            <option value="iluminacao">Iluminação</option>
           </select>
         </div>
       </div>
@@ -706,8 +702,8 @@
       const article = document.createElement('article');
       article.className = 'product-card';
 
-      // categoria de busca (para filtro)
-      article.dataset.category = normalizeText(prod.categoria_busca || '');
+      // categoria (usando categoria_label)
+      article.dataset.category = normalizeText(prod.categoria_label || '');
       // nome e código (para busca)
       article.dataset.name = normalizeText(prod.nome || '');
       article.dataset.code = normalizeText(prod.codigo || '');
@@ -803,6 +799,29 @@
       return article;
     }
 
+    function gerarCategorias() {
+      const categoriasSet = new Set();
+      produtos.forEach(p => {
+        if (p.categoria_label && p.categoria_label.trim() !== '') {
+          categoriasSet.add(p.categoria_label.trim());
+        }
+      });
+
+      const categorias = Array.from(categoriasSet).sort((a, b) =>
+        a.localeCompare(b, 'pt-BR')
+      );
+
+      // Mantém a opção "todas" e recria o restante
+      categoryFilter.innerHTML = '<option value="todas">Todas as categorias</option>';
+
+      categorias.forEach(cat => {
+        const opt = document.createElement('option');
+        opt.value = cat;
+        opt.textContent = cat;
+        categoryFilter.appendChild(opt);
+      });
+    }
+
     function renderizarProdutos() {
       productsGrid.innerHTML = '';
       cardsDOM = produtos.map(p => {
@@ -888,7 +907,8 @@
 
     function filterProducts() {
       const searchTerm = normalizeText(searchInput.value.trim());
-      const category = normalizeText(categoryFilter.value);
+      const categoryValue = categoryFilter.value;
+      const category = normalizeText(categoryValue);
 
       let minPrice = parseFloat((minPriceInput.value || '').replace(',', '.'));
       if (isNaN(minPrice)) minPrice = null;
@@ -907,7 +927,7 @@
       cardsDOM.forEach(card => {
         const name = card.dataset.name || '';
         const code = card.dataset.code || '';
-        const cardCategories = card.dataset.category || '';
+        const cardCategory = card.dataset.category || '';
         const priceValue = parseFloat(card.dataset.price || '');
         const discountValue = parseFloat(card.dataset.discount || '');
 
@@ -915,7 +935,7 @@
 
         const matchSearch = !searchTerm || haystack.includes(searchTerm);
         const matchCategory =
-          category === 'todas' || cardCategories.includes(category);
+          category === 'todas' || cardCategory === category;
 
         const matchPriceMin =
           minPrice === null || (!isNaN(priceValue) && priceValue >= minPrice);
@@ -964,6 +984,7 @@
           return obj;
         });
 
+        gerarCategorias();
         renderizarProdutos();
       } catch (e) {
         console.error('Erro ao carregar produtos.csv', e);
