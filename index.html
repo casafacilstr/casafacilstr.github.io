@@ -201,7 +201,8 @@
     }
 
     /* Filtro de preços */
-    .price-filters {
+    .price-filters,
+    .discount-filters {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
@@ -211,11 +212,13 @@
       color: var(--text-muted);
     }
 
-    .price-filters-label {
+    .price-filters-label,
+    .discount-filters-label {
       font-weight: 500;
     }
 
-    .price-filters input {
+    .price-filters input,
+    .discount-filters input {
       width: 110px;
       padding: 6px 10px;
       border-radius: 999px;
@@ -225,13 +228,15 @@
       outline: none;
     }
 
-    .price-filters input:focus {
+    .price-filters input:focus,
+    .discount-filters input:focus {
       border-color: var(--primary);
       background: #ffffff;
       box-shadow: 0 0 0 1px rgba(198,40,40,0.15);
     }
 
-    .price-separator {
+    .price-separator,
+    .discount-separator {
       font-size: 12px;
     }
 
@@ -260,25 +265,70 @@
       border-color: rgba(198,40,40,0.18);
     }
 
-    /* Imagem do produto */
+    /* Carrossel de imagens */
     .product-image-wrapper {
+      position: relative;
       width: 100%;
       border-radius: 14px;
       overflow: hidden;
       background: #fafafa;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       margin-bottom: 6px;
       aspect-ratio: 4 / 3;
       max-height: 230px;
+      display: flex;
+      align-items: center;
+    }
+
+    .product-image-strip {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
     }
 
     .product-image {
+      flex: 0 0 100%;
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain; /* encaixa a imagem sem cortar */
       display: block;
+      scroll-snap-align: center;
+      background: #fafafa;
+    }
+
+    .image-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      border: none;
+      background: rgba(0,0,0,0.35);
+      color: #fff;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 2;
+      padding: 0;
+    }
+
+    .image-nav-prev {
+      left: 6px;
+    }
+
+    .image-nav-next {
+      right: 6px;
+    }
+
+    .image-nav:disabled {
+      opacity: 0.3;
+      cursor: default;
     }
 
     .product-tag {
@@ -319,6 +369,21 @@
       font-size: 16px;
       font-weight: 700;
       color: var(--primary);
+    }
+
+    .price-extra {
+      margin-top: 4px;
+    }
+
+    .discount-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #ffebee;
+      color: #c62828;
+      font-size: 11px;
+      font-weight: 600;
     }
 
     .product-footer {
@@ -397,7 +462,8 @@
         margin-left: 0;
       }
 
-      .price-filters input {
+      .price-filters input,
+      .discount-filters input {
         width: 100px;
       }
     }
@@ -473,6 +539,27 @@
           placeholder="Máximo"
         />
       </div>
+
+      <div class="discount-filters">
+        <span class="discount-filters-label">Filtrar por desconto (%):</span>
+        <input
+          type="number"
+          id="minDiscount"
+          min="0"
+          step="0.1"
+          inputmode="decimal"
+          placeholder="Mínimo"
+        />
+        <span class="discount-separator">até</span>
+        <input
+          type="number"
+          id="maxDiscount"
+          min="0"
+          step="0.1"
+          inputmode="decimal"
+          placeholder="Máximo"
+        />
+      </div>
     </section>
 
     <!-- Lista de produtos (preenchida via JS) -->
@@ -480,7 +567,7 @@
       <div class="products-grid" id="productsGrid"></div>
 
       <div class="empty-state" id="emptyState">
-        Nenhum produto encontrado com os filtros atuais. Tente outra palavra-chave, categoria ou faixa de preço.
+        Nenhum produto encontrado com os filtros atuais. Tente outra palavra-chave, categoria, faixa de preço ou desconto.
       </div>
     </section>
 
@@ -495,6 +582,8 @@
     const categoryFilter = document.getElementById('categoryFilter');
     const minPriceInput = document.getElementById('minPrice');
     const maxPriceInput = document.getElementById('maxPrice');
+    const minDiscountInput = document.getElementById('minDiscount');
+    const maxDiscountInput = document.getElementById('maxDiscount');
     const productsGrid = document.getElementById('productsGrid');
     const resultsCount = document.getElementById('resultsCount');
     const emptyState = document.getElementById('emptyState');
@@ -528,21 +617,52 @@
       // salva preço numérico para filtro
       article.dataset.price = !isNaN(precoNumero) ? precoNumero : '';
 
-      // caminho da imagem: imagens/{codigo}/1.jpg
+      // desconto (em %)
+      const descontoBruto = (prod.desconto || '').toString().replace(',', '.');
+      const descontoNumero = parseFloat(descontoBruto);
+      article.dataset.discount = !isNaN(descontoNumero) ? descontoNumero : '';
+
+      let descontoHTML = '';
+      if (!isNaN(descontoNumero) && descontoNumero > 0) {
+        const descontoFormatado =
+          descontoNumero % 1 === 0
+            ? descontoNumero.toFixed(0)
+            : descontoNumero.toFixed(1);
+        descontoHTML = `<div class="price-extra">
+          <span class="discount-pill">${descontoFormatado}% OFF</span>
+        </div>`;
+      }
+
+      // carrossel de imagens: imagens/{codigo}/1.webp ... 5.webp
       const imageFolder = (prod.codigo || '').trim();
-      const imageUrl = imageFolder ? `imagens/${imageFolder}/1.webp` : '';
-      const imageHTML = imageUrl
-        ? `
-        <div class="product-image-wrapper">
-          <img
-            class="product-image"
-            src="${imageUrl}"
-            alt="${prod.nome || ''}"
-            loading="lazy"
-            onerror="this.parentElement.style.display='none';"
-          />
-        </div>`
-        : '';
+      let imageHTML = '';
+
+      if (imageFolder) {
+        const maxImages = 5; // ajuste se quiser mais
+        let images = '';
+
+        for (let i = 1; i <= maxImages; i++) {
+          images += `
+            <img
+              class="product-image"
+              src="imagens/${imageFolder}/${i}.webp"
+              alt="${prod.nome || ''} - imagem ${i}"
+              loading="lazy"
+              onerror="this.style.display='none';"
+            />
+          `;
+        }
+
+        imageHTML = `
+          <div class="product-image-wrapper">
+            <button type="button" class="image-nav image-nav-prev">‹</button>
+            <div class="product-image-strip">
+              ${images}
+            </div>
+            <button type="button" class="image-nav image-nav-next">›</button>
+          </div>
+        `;
+      }
 
       article.innerHTML = `
         ${imageHTML}
@@ -558,6 +678,7 @@
           <div>
             <div class="price-label">a partir de</div>
             <div class="price-value">R$ ${precoFormatado}</div>
+            ${descontoHTML}
           </div>
           <div class="shipping-info">${prod.info_envio || ''}</div>
         </div>
@@ -585,7 +706,38 @@
         productsGrid.appendChild(card);
         return card;
       });
+      attachImageNavEvents();
       filterProducts(); // aplica os filtros iniciais (sem busca)
+    }
+
+    function attachImageNavEvents() {
+      const wrappers = document.querySelectorAll('.product-image-wrapper');
+      wrappers.forEach(wrapper => {
+        const strip = wrapper.querySelector('.product-image-strip');
+        const prevBtn = wrapper.querySelector('.image-nav-prev');
+        const nextBtn = wrapper.querySelector('.image-nav-next');
+
+        if (!strip || !prevBtn || !nextBtn) return;
+
+        function updateButtons() {
+          const maxScrollLeft = strip.scrollWidth - strip.clientWidth;
+          prevBtn.disabled = strip.scrollLeft <= 0;
+          nextBtn.disabled = strip.scrollLeft >= maxScrollLeft - 1;
+        }
+
+        prevBtn.addEventListener('click', () => {
+          strip.scrollBy({ left: -strip.clientWidth, behavior: 'smooth' });
+        });
+
+        nextBtn.addEventListener('click', () => {
+          strip.scrollBy({ left: strip.clientWidth, behavior: 'smooth' });
+        });
+
+        strip.addEventListener('scroll', updateButtons);
+
+        // inicializa estado dos botões
+        setTimeout(updateButtons, 100);
+      });
     }
 
     function filterProducts() {
@@ -598,6 +750,12 @@
       let maxPrice = parseFloat((maxPriceInput.value || '').replace(',', '.'));
       if (isNaN(maxPrice)) maxPrice = null;
 
+      let minDiscount = parseFloat((minDiscountInput.value || '').replace(',', '.'));
+      if (isNaN(minDiscount)) minDiscount = null;
+
+      let maxDiscount = parseFloat((maxDiscountInput.value || '').replace(',', '.'));
+      if (isNaN(maxDiscount)) maxDiscount = null;
+
       let visibleCount = 0;
 
       cardsDOM.forEach(card => {
@@ -605,6 +763,7 @@
         const code = card.dataset.code || '';
         const cardCategories = card.dataset.category || '';
         const priceValue = parseFloat(card.dataset.price || '');
+        const discountValue = parseFloat(card.dataset.discount || '');
 
         const haystack = (name + ' ' + code).trim();
 
@@ -618,7 +777,15 @@
           maxPrice === null || (!isNaN(priceValue) && priceValue <= maxPrice);
         const matchPrice = matchPriceMin && matchPriceMax;
 
-        if (matchSearch && matchCategory && matchPrice) {
+        const matchDiscountMin =
+          minDiscount === null ||
+          (!isNaN(discountValue) && discountValue >= minDiscount);
+        const matchDiscountMax =
+          maxDiscount === null ||
+          (!isNaN(discountValue) && discountValue <= maxDiscount);
+        const matchDiscount = matchDiscountMin && matchDiscountMax;
+
+        if (matchSearch && matchCategory && matchPrice && matchDiscount) {
           card.style.display = '';
           visibleCount++;
         } else {
@@ -672,10 +839,11 @@
     categoryFilter.addEventListener('change', filterProducts);
     minPriceInput.addEventListener('input', filterProducts);
     maxPriceInput.addEventListener('input', filterProducts);
+    minDiscountInput.addEventListener('input', filterProducts);
+    maxDiscountInput.addEventListener('input', filterProducts);
 
     // Carrega os dados ao abrir a página
     carregarCSV();
   </script>
 </body>
 </html>
-
