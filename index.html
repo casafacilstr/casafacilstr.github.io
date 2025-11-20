@@ -200,6 +200,41 @@
       box-shadow: 0 0 0 1px rgba(198,40,40,0.15);
     }
 
+    /* Filtro de preços */
+    .price-filters {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .price-filters-label {
+      font-weight: 500;
+    }
+
+    .price-filters input {
+      width: 110px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border-soft);
+      font-size: 12px;
+      background: #fafafa;
+      outline: none;
+    }
+
+    .price-filters input:focus {
+      border-color: var(--primary);
+      background: #ffffff;
+      box-shadow: 0 0 0 1px rgba(198,40,40,0.15);
+    }
+
+    .price-separator {
+      font-size: 12px;
+    }
+
     /* Grid de produtos */
     .products-grid {
       display: grid;
@@ -223,6 +258,27 @@
       transform: translateY(-2px);
       box-shadow: 0 14px 30px rgba(0,0,0,0.09);
       border-color: rgba(198,40,40,0.18);
+    }
+
+    /* Imagem do produto */
+    .product-image-wrapper {
+      width: 100%;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #fafafa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 6px;
+      aspect-ratio: 4 / 3;
+      max-height: 230px;
+    }
+
+    .product-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
 
     .product-tag {
@@ -340,6 +396,10 @@
       .results-count {
         margin-left: 0;
       }
+
+      .price-filters input {
+        width: 100px;
+      }
     }
   </style>
 </head>
@@ -377,7 +437,7 @@
           <input
             type="search"
             id="searchInput"
-            placeholder="Pesquisar por nome, tipo ou código (ex.: 1AN25PA, árvore, Papai Noel...)"
+            placeholder="Pesquisar por nome, tipo ou código (ex.: AZ1PO, árvore, Papai Noel...)"
           />
           <span>🔍</span>
         </div>
@@ -392,6 +452,27 @@
           </select>
         </div>
       </div>
+
+      <div class="price-filters">
+        <span class="price-filters-label">Filtrar por preço (R$):</span>
+        <input
+          type="number"
+          id="minPrice"
+          min="0"
+          step="0.01"
+          inputmode="decimal"
+          placeholder="Mínimo"
+        />
+        <span class="price-separator">até</span>
+        <input
+          type="number"
+          id="maxPrice"
+          min="0"
+          step="0.01"
+          inputmode="decimal"
+          placeholder="Máximo"
+        />
+      </div>
     </section>
 
     <!-- Lista de produtos (preenchida via JS) -->
@@ -399,12 +480,12 @@
       <div class="products-grid" id="productsGrid"></div>
 
       <div class="empty-state" id="emptyState">
-        Nenhum produto encontrado com os filtros atuais. Tente outra palavra-chave ou categoria.
+        Nenhum produto encontrado com os filtros atuais. Tente outra palavra-chave, categoria ou faixa de preço.
       </div>
     </section>
 
     <footer>
-      Casa Fácil Store • Página de divulgação de produtos em parceria com a Amazon.  
+      Casa Fácil Store • Página de divulgação de produtos em parceria com a Amazon.
       Os valores exibidos são de responsabilidade do vendedor na página de destino.
     </footer>
   </div>
@@ -412,6 +493,8 @@
   <script>
     const searchInput = document.getElementById('searchInput');
     const categoryFilter = document.getElementById('categoryFilter');
+    const minPriceInput = document.getElementById('minPrice');
+    const maxPriceInput = document.getElementById('maxPrice');
     const productsGrid = document.getElementById('productsGrid');
     const resultsCount = document.getElementById('resultsCount');
     const emptyState = document.getElementById('emptyState');
@@ -436,18 +519,39 @@
       article.dataset.name = normalizeText(prod.nome || '');
       article.dataset.code = normalizeText(prod.codigo || '');
 
-      const precoNumero = Number(prod.preco || 0);
+      const precoBruto = (prod.preco || '').toString().replace(',', '.');
+      const precoNumero = parseFloat(precoBruto);
       const precoFormatado = isNaN(precoNumero)
         ? (prod.preco || '')
         : precoNumero.toFixed(2).replace('.', ',');
 
+      // salva preço numérico para filtro
+      article.dataset.price = !isNaN(precoNumero) ? precoNumero : '';
+
+      // caminho da imagem: imagens/{codigo}/1.jpg
+      const imageFolder = (prod.codigo || '').trim();
+      const imageUrl = imageFolder ? `imagens/${imageFolder}/1.jpg` : '';
+      const imageHTML = imageUrl
+        ? `
+        <div class="product-image-wrapper">
+          <img
+            class="product-image"
+            src="${imageUrl}"
+            alt="${prod.nome || ''}"
+            loading="lazy"
+            onerror="this.parentElement.style.display='none';"
+          />
+        </div>`
+        : '';
+
       article.innerHTML = `
+        ${imageHTML}
         <span class="product-tag">${prod.categoria_label || ''}</span>
         <h3 class="product-title">
           ${prod.codigo || ''} - ${prod.nome || ''}
         </h3>
         <p class="product-desc">
-          ${prod.descricao || ''}
+          ${prod.descricao || prod.Descricao || ''}
         </p>
 
         <div class="product-meta">
@@ -488,12 +592,19 @@
       const searchTerm = normalizeText(searchInput.value.trim());
       const category = normalizeText(categoryFilter.value);
 
+      let minPrice = parseFloat((minPriceInput.value || '').replace(',', '.'));
+      if (isNaN(minPrice)) minPrice = null;
+
+      let maxPrice = parseFloat((maxPriceInput.value || '').replace(',', '.'));
+      if (isNaN(maxPrice)) maxPrice = null;
+
       let visibleCount = 0;
 
       cardsDOM.forEach(card => {
         const name = card.dataset.name || '';
         const code = card.dataset.code || '';
         const cardCategories = card.dataset.category || '';
+        const priceValue = parseFloat(card.dataset.price || '');
 
         const haystack = (name + ' ' + code).trim();
 
@@ -501,7 +612,13 @@
         const matchCategory =
           category === 'todas' || cardCategories.includes(category);
 
-        if (matchSearch && matchCategory) {
+        const matchPriceMin =
+          minPrice === null || (!isNaN(priceValue) && priceValue >= minPrice);
+        const matchPriceMax =
+          maxPrice === null || (!isNaN(priceValue) && priceValue <= maxPrice);
+        const matchPrice = matchPriceMin && matchPriceMax;
+
+        if (matchSearch && matchCategory && matchPrice) {
           card.style.display = '';
           visibleCount++;
         } else {
@@ -553,10 +670,11 @@
     // Eventos
     searchInput.addEventListener('input', filterProducts);
     categoryFilter.addEventListener('change', filterProducts);
+    minPriceInput.addEventListener('input', filterProducts);
+    maxPriceInput.addEventListener('input', filterProducts);
 
     // Carrega os dados ao abrir a página
     carregarCSV();
   </script>
 </body>
 </html>
-
