@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Casa Fácil Store - Produtos da semana</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f4ecdd;
+      --card-bg: #ffffff;
+      --primary: #143c3a;
+      --primary-soft: #e1ebe7;
+      --accent: #1f5956;
+      --text-main: #1f2827;
+      --text-muted: #6b7776;
+      --border-soft: #dcd7c8;
+      --shadow-soft: 0 10px 25px rgba(0,0,0,0.04);
+      --radius-lg: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #f8f1e0 0, var(--bg) 45%, var(--bg) 100%);
+      color: var(--text-main);
+      line-height: 1.5;
+      padding: 24px 12px 40px;
+    }
+
+    .page-wrapper {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    header {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 22px;
+      align-items: flex-start;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 700;
+      font-size: 22px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .brand-text h1 {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--primary);
+    }
+
+    .brand-text span {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .hero {
+      margin-top: 6px;
+    }
+
+    .hero-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
+
+    .hero-subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+      max-width: 520px;
+    }
+
+    .products-grid {
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 16px;
+    }
+
+    .product-card {
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      padding: 14px 14px 16px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(255,255,255,0.95);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px rgba(0,0,0,0.06);
+      border-color: rgba(20,60,58,0.18);
+    }
+
+    .product-tag {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--accent);
+      background: #e4f1ef;
+      padding: 2px 8px;
+      border-radius: 999px;
+      align-self: flex-start;
+    }
+
+    .product-title {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .product-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      min-height: 40px;
+    }
+
+    .product-meta {
+      margin-top: 4px;
+      font-size: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+    }
+
+    .price-label {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .price-value {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .shipping-info {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: right;
+    }
+
+    .product-footer {
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .btn-buy {
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: none;
+      background: var(--primary);
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: background 0.15s ease, transform 0.1s ease;
+    }
+
+    .btn-buy:hover {
+      background: #0f2f2d;
+      transform: translateY(-1px);
+    }
+
+    .btn-buy span {
+      font-size: 14px;
+    }
+
+    .info-small {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: center;
+      margin-top: 6px;
+    }
+
+    .empty-state {
+      margin-top: 22px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .more-products-wrapper {
+      margin-top: 26px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .btn-more {
+      padding: 10px 20px;
+      border-radius: 999px;
+      border: 1px solid var(--primary);
+      background: var(--primary-soft);
+      color: var(--primary);
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease;
+    }
+
+    .btn-more:hover {
+      background: var(--primary);
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    footer {
+      margin-top: 28px;
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    @media (max-width: 720px) {
+      body {
+        padding: 18px 10px 32px;
+      }
+
+      header {
+        margin-bottom: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-wrapper">
+    <header>
+      <div class="brand">
+        <div class="brand-logo">CF</div>
+        <div class="brand-text">
+          <h1>Casa Fácil Store</h1>
+          <span>Vitrine independente de ofertas para o lar</span>
+        </div>
+      </div>
+
+      <div class="hero">
+        <h2 class="hero-title">Produtos da semana</h2>
+        <p class="hero-subtitle">
+          Confira os 5 últimos produtos adicionados à nossa vitrine. Itens fresquinhos para facilitar seu dia a dia em casa.
+        </p>
+      </div>
+    </header>
+
+    <section id="productsSection">
+      <div class="products-grid" id="productsGrid"></div>
+      <div class="empty-state" id="emptyState" style="display:none;">
+        Ainda não há produtos cadastrados no arquivo <strong>produtos.csv</strong>.
+      </div>
+    </section>
+
+    <div class="info-small">
+      Compras realizadas diretamente nas lojas parceiras através dos links dos produtos.
+    </div>
+
+    <div class="more-products-wrapper">
+      <!-- ATENÇÃO: ajuste o href abaixo para o nome do arquivo da sua vitrine completa -->
+      <a class="btn-more" href="vitrine-completa.html">
+        <span>🛍️</span> Ver mais produtos
+      </a>
+    </div>
+
+    <footer>
+      Casa Fácil Store • Vitrine independente de ofertas para o lar.  
+      As vendas, entregas, cobranças e garantias são de responsabilidade exclusiva das lojas indicadas nos links dos produtos.
+    </footer>
+  </div>
+
+  <script>
+    const productsGrid = document.getElementById('productsGrid');
+    const emptyState = document.getElementById('emptyState');
+
+    function resumoTexto(texto, maxChars = 140) {
+      if (!texto) return '';
+      const clean = texto.trim();
+      if (clean.length <= maxChars) return clean;
+      return clean.slice(0, maxChars - 1).trimEnd() + '…';
+    }
+
+    async function carregarUltimosProdutos() {
+      try {
+        const resp = await fetch('produtos.csv');
+        if (!resp.ok) {
+          throw new Error('Resposta HTTP não OK');
+        }
+
+        const texto = await resp.text();
+        const linhas = texto
+          .trim()
+          .split('\n')
+          .map(l => l.trim())
+          .filter(l => l !== '');
+
+        if (linhas.length <= 1) {
+          emptyState.style.display = 'block';
+          return;
+        }
+
+        const cabecalho = linhas
+          .shift()
+          .split(';')
+          .map(h => h.trim());
+
+        const produtos = linhas.map(linha => {
+          const cols = linha.split(';');
+          const obj = {};
+          cabecalho.forEach((campo, idx) => {
+            obj[campo] = (cols[idx] || '').trim();
+          });
+          return obj;
+        });
+
+        // Pega os 5 últimos produtos adicionados ao CSV (últimas linhas) e mostra do mais recente para o mais antigo
+        const ultimosCinco = produtos.slice(-5).reverse();
+
+        if (ultimosCinco.length === 0) {
+          emptyState.style.display = 'block';
+          return;
+        }
+
+        ultimosCinco.forEach(prod => {
+          const card = document.createElement('article');
+          card.className = 'product-card';
+
+          const precoBruto = (prod.preco || '').toString().replace(',', '.');
+          const precoNumero = parseFloat(precoBruto);
+          const precoFormatado = isNaN(precoNumero)
+            ? (prod.preco || '')
+            : precoNumero.toFixed(2).replace('.', ',');
+
+          const desc = resumoTexto(prod.descricao || prod.Descricao || '');
+
+          card.innerHTML = `
+            <span class="product-tag">${prod.categoria_label || ''}</span>
+            <h3 class="product-title">
+              ${prod.codigo || ''} - ${prod.nome || ''}
+            </h3>
+            <p class="product-desc">${desc}</p>
+            <div class="product-meta">
+              <div>
+                <div class="price-label">a partir de</div>
+                <div class="price-value">R$ ${precoFormatado}</div>
+              </div>
+              <div class="shipping-info">
+                ${prod.info_envio || ''}
+              </div>
+            </div>
+            <div class="product-footer">
+              <a
+                class="btn-buy"
+                href="${prod.link || '#'}"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span>🛒</span> Comprar
+              </a>
+            </div>
+          `;
+
+          productsGrid.appendChild(card);
+        });
+      } catch (e) {
+        console.error('Erro ao carregar produtos.csv', e);
+        emptyState.style.display = 'block';
+        emptyState.textContent = 'Erro ao carregar produtos. Verifique se o arquivo produtos.csv está na mesma pasta do HTML.';
+      }
+    }
+
+    carregarUltimosProdutos();
+  </script>
+</body>
+</html>
