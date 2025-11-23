@@ -427,4 +427,44 @@
 
           const desc = resumoTexto(prod.descricao || prod.Descricao || '');
 
-          ca
+          card.innerHTML = `
+            <h3 class="product-title">
+              ${prod.nome || ''}
+            </h3>
+            ${imageHTML}
+            <p class="product-desc">${desc}</p>
+
+            <div class="price-block">
+              <div class="price-label">a partir de</div>
+              <div class="price-value">R$ ${precoFormatado}</div>
+              ${descontoHTML}
+            </div>
+
+            <div class="product-footer">
+              <a
+                class="btn-buy"
+                href="${prod.link || '#'}"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span>🛒</span> Comprar
+              </a>
+              <div class="shipping-info">
+                ${prod.info_envio || ''}
+              </div>
+            </div>
+          `;
+
+          productsGrid.appendChild(card);
+        });
+      } catch (e) {
+        console.error('Erro ao carregar produtos.csv', e);
+        emptyState.style.display = 'block';
+        emptyState.textContent = 'Erro ao carregar produtos. Verifique se o arquivo produtos.csv está na mesma pasta do HTML.';
+      }
+    }
+
+    carregarUltimosProdutos();
+  </script>
+</body>
+</html>
