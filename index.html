@@ -99,13 +99,14 @@
     .products-grid {
       margin-top: 20px;
       display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
+      grid-template-columns: repeat(5, minmax(0, 1fr)); /* desktop: 5 por linha */
       gap: 18px;
     }
 
+    /* telas médias (tipo tablet / notebook menor) */
     @media (max-width: 1050px) {
       .products-grid {
-        grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+        grid-template-columns: repeat(3, minmax(0, 1fr)); /* 3 por linha */
       }
     }
 
@@ -133,7 +134,7 @@
       font-size: 14px;
       font-weight: 600;
       color: var(--primary);
-      min-height: 36px; /* segura 2 linhas */
+      min-height: 36px; /* segura 2 linhas de título */
     }
 
     .product-image-wrapper {
@@ -279,6 +280,7 @@
       text-align: center;
     }
 
+    /* CELULAR: 2 PRODUTOS POR LINHA + ajuste de padding */
     @media (max-width: 720px) {
       body {
         padding: 18px 10px 32px;
@@ -286,6 +288,10 @@
 
       header {
         margin-bottom: 18px;
+      }
+
+      .products-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)); /* 2 por linha no celular */
       }
     }
   </style>
