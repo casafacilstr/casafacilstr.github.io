@@ -380,7 +380,7 @@
         });
 
         // 5 últimos produtos do CSV (mais recentes primeiro)
-        const ultimosCinco = produtos.slice(-10).reverse();
+        const ultimosCinco = produtos.slice(-15).reverse();
 
         if (ultimosCinco.length === 0) {
           emptyState.style.display = 'block';
@@ -474,4 +474,5 @@
   </script>
 </body>
 </html>
+
 
